@@ -161,7 +161,8 @@ export function Home() {
       icon: tool.icon,
       accent: cn(colors.bg, colors.text),
       features: content?.features ?? [],
-      preview: content?.preview ?? null,
+      video: `/previews/${tool.id}.mp4`,
+      poster: `/previews/${tool.id}.jpg`,
     });
   };
 
