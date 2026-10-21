@@ -2,7 +2,7 @@ import type { ToolId } from "@/lib/store";
 
 /**
  * Teaser content for premium tools. The real tools are not part of
- * NoodleHub Lite — previews are recorded demo clips in public/previews/<id>.mp4.
+ * NoodleHub Lite - previews are recorded demo clips in public/previews/<id>.mp4.
  */
 
 export const LOCKED_CONTENT: Partial<Record<ToolId, { features: string[] }>> = {

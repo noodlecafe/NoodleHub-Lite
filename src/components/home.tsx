@@ -23,6 +23,7 @@ import {
 import { useUI, type ToolId } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { HeroLoop } from "@/components/hero-loop";
+import { RecordCrate } from "@/components/easter-eggs";
 import { LockedPreview, CHECKOUT_URL, type LockedTool } from "@/components/locked-preview";
 import { LOCKED_CONTENT } from "@/components/locked-tools";
 
@@ -199,27 +200,28 @@ function ToolMeter() {
   );
 }
 
-/** Members pitch shown above the tool grid. */
+/** Members pitch shown above the tool grid, dressed up as a record crate. */
 function UpgradeBanner() {
   const perks = [
-    "Name any chord you play — just click the keys",
+    "Name any chord you play. Just click the keys",
     "Train your ear to recognize intervals by sound",
     "See every scale and chord across the whole fretboard",
     "Find the key from the notes you play",
   ];
   return (
     <div className="relative overflow-hidden noodle-card p-6 sm:p-8 mb-8 border-noodle-yellow/30">
-      <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-noodle-yellow/10 blur-3xl pointer-events-none" />
-      <div className="grid lg:grid-cols-[1fr_auto] gap-6 items-center relative">
+      <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-noodle-pink/10 blur-3xl pointer-events-none" />
+      <div className="absolute -left-10 -bottom-20 w-56 h-56 rounded-full bg-noodle-yellow/10 blur-3xl pointer-events-none" />
+      <div className="grid lg:grid-cols-[1fr_auto] gap-8 items-center relative">
         <div>
-          <div className="font-display text-[10px] uppercase text-noodle-pink mb-3">
-            9 tools are waiting for you
-          </div>
-          <h3 className="text-2xl sm:text-3xl font-extrabold mb-4 leading-tight">
-            You&apos;ve got the basics. Members get the{" "}
-            <span className="text-noodle-yellow">whole toolkit.</span>
+          <div className="font-display text-[10px] uppercase text-noodle-pink mb-3">Side B · 9 more tracks</div>
+          <h3 className="text-2xl sm:text-3xl font-extrabold mb-2 leading-tight">
+            Everything in its <span className="text-noodle-yellow">right place.</span>
           </h3>
-          <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-ink-soft">
+          <p className="text-ink-soft mb-5">
+            You&apos;re playing 3 of 12 tracks. Members get the whole album.
+          </p>
+          <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-ink-soft mb-6">
             {perks.map((p) => (
               <li key={p} className="flex items-start gap-2">
                 <span className="mt-1.5 w-1.5 h-1.5 bg-noodle-yellow shrink-0" />
@@ -227,19 +229,20 @@ function UpgradeBanner() {
               </li>
             ))}
           </ul>
+          <div className="flex flex-wrap items-center gap-4">
+            <a
+              href={CHECKOUT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="noodle-btn text-base flex items-center gap-2 whitespace-nowrap"
+            >
+              <LockOpen className="h-5 w-5" />
+              Unlock all 12 tools
+            </a>
+            <span className="text-xs text-ink-soft">Secure checkout with Whop</span>
+          </div>
         </div>
-        <div className="flex flex-col items-start lg:items-center gap-2">
-          <a
-            href={CHECKOUT_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="noodle-btn text-base flex items-center gap-2 whitespace-nowrap"
-          >
-            <LockOpen className="h-5 w-5" />
-            Unlock all 12 tools
-          </a>
-          <span className="text-xs text-ink-soft">Secure checkout with Whop</span>
-        </div>
+        <RecordCrate />
       </div>
     </div>
   );
@@ -382,7 +385,7 @@ export function Home() {
                 The Tool Kit
               </h2>
               <p className="text-ink-soft">
-                Pick a tool. Locked tools are for members — tap one to preview it.
+                Pick a tool. Locked tools are for members. Tap one to preview it.
               </p>
             </div>
             <div className="flex sm:hidden gap-1 flex-wrap">
@@ -416,7 +419,7 @@ export function Home() {
                   onClick={() => openTool(tool)}
                   className={cn(
                     "group relative text-left noodle-card p-6 hover:-translate-y-1 hover:border-white/20 transition-all",
-                    isLocked && "opacity-75 hover:opacity-100",
+                    isLocked && "opacity-40 hover:opacity-75",
                   )}
                 >
                   <div className="flex items-start justify-between mb-5">
@@ -425,7 +428,7 @@ export function Home() {
                         "w-12 h-12 rounded-xl flex items-center justify-center transition-shadow",
                         colors.bg,
                         colors.glow,
-                        isLocked && "saturate-50",
+                        isLocked && "grayscale",
                       )}
                     >
                       {tool.icon}

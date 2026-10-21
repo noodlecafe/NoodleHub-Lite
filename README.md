@@ -1,12 +1,12 @@
 # 🍜 NoodleHub
 
-> **NoodleHub Lite** — the free edition. Chord Progressions, Metronome, and the Guitar Chord Library are free to use; every other tool is shown as a locked preview. [Join to unlock all 12 tools →](https://whop.com/checkout/plan_hrnkCXO1bMwRs)
+> **NoodleHub Lite** - the free edition. Chord Progressions, Metronome, and the Guitar Chord Library are free to use; every other tool is shown as a locked preview. [Join to unlock all 12 tools →](https://whop.com/checkout/plan_hrnkCXO1bMwRs)
 
-**Free, open-source musician tools — built with Next.js, Tone.js, and PyTheory.**
+**Free, open-source musician tools - built with Next.js, Tone.js, and PyTheory.**
 
-NoodleHub is a browser-based toolkit for songwriters, producers, learners, and anyone who makes music. Twelve carefully crafted tools cover the everyday needs of a musician — chord identification, scale exploration, ear training, metronome, fretboard visualization, and more. Everything runs in the browser; nothing leaves your device.
+NoodleHub is a browser-based toolkit for songwriters, producers, learners, and anyone who makes music. Twelve carefully crafted tools cover the everyday needs of a musician - chord identification, scale exploration, ear training, metronome, fretboard visualization, and more. Everything runs in the browser; nothing leaves your device.
 
-Inspired by the playful, friendly aesthetic of [noodlecafé sessions](https://noodlecafe.co) — a community for people who want to learn music, make music, and have other people around while they do it.
+Inspired by the playful, friendly aesthetic of [noodlecafé sessions](https://noodlecafe.co) - a community for people who want to learn music, make music, and have other people around while they do it.
 
 ---
 
@@ -31,9 +31,9 @@ Inspired by the playful, friendly aesthetic of [noodlecafé sessions](https://no
 
 ### Design
 
-- **Noodlecafé-inspired palette** — warm cream background, royal blue primary, pastel pink and lemon yellow accents, hard black borders and shadows for that hand-drawn feel.
+- **Noodlecafé-inspired palette** - warm cream background, royal blue primary, pastel pink and lemon yellow accents, hard black borders and shadows for that hand-drawn feel.
 - **Anton display font** for bold uppercase headlines.
-- **Fully responsive** — works on phone, tablet, and desktop.
+- **Fully responsive** - works on phone, tablet, and desktop.
 - **No third-party tracking, no ads, no logins.**
 
 ### Powered By Real Music Theory
@@ -50,7 +50,7 @@ For instant browser-side audio (chord playback, metronome clicks, etc.), NoodleH
 
 - **Node.js 18+** (tested on 20 and 22)
 - **Python 3.10+** with `pip`
-- **bun** (optional but recommended — `npm i -g bun`)
+- **bun** (optional but recommended - `npm i -g bun`)
 
 ### Install
 
@@ -218,12 +218,12 @@ All colors are defined as CSS variables in `src/app/globals.css` under `:root`:
 
 Pull requests welcome! Some ideas for new tools:
 
-- **Tuner** — use the Web Audio API to detect pitch from the microphone.
-- **Song key analyzer** — paste a chord progression, get the key + suggested substitutions.
-- **Drum pattern sequencer** — step sequencer with Tone.js drum samples.
-- **Lyrics & chords formatter** — paste a song, auto-format with chord names above lyrics.
-- **Ear training: melody** — play a short melody, user repeats it on the piano.
-- **Reverse chord finder** — pick a chord name, get all voicings on guitar/piano.
+- **Tuner** - use the Web Audio API to detect pitch from the microphone.
+- **Song key analyzer** - paste a chord progression, get the key + suggested substitutions.
+- **Drum pattern sequencer** - step sequencer with Tone.js drum samples.
+- **Lyrics & chords formatter** - paste a song, auto-format with chord names above lyrics.
+- **Ear training: melody** - play a short melody, user repeats it on the piano.
+- **Reverse chord finder** - pick a chord name, get all voicings on guitar/piano.
 
 ### Style guide
 
@@ -237,15 +237,15 @@ Pull requests welcome! Some ideas for new tools:
 
 ## 📜 License
 
-MIT — see `LICENSE`.
+MIT - see `LICENSE`.
 
 ## 🙏 Acknowledgements
 
-- **[PyTheory](https://github.com/KieranP/PyTheory)** — music theory engine
-- **[Tone.js](https://tonejs.github.io/)** — Web Audio framework
-- **[Tonal.js](https://github.com/tonaljs/tonal)** — client-side music theory (available as a fallback)
+- **[PyTheory](https://github.com/KieranP/PyTheory)** - music theory engine
+- **[Tone.js](https://tonejs.github.io/)** - Web Audio framework
+- **[Tonal.js](https://github.com/tonaljs/tonal)** - client-side music theory (available as a fallback)
 - **[Next.js](https://nextjs.org)** + **[Tailwind CSS](https://tailwindcss.com)** + **[shadcn/ui](https://ui.shadcn.com)**
-- **[noodlecafé sessions](https://noodlecafe.co)** — for the design inspiration and the community spirit
+- **[noodlecafé sessions](https://noodlecafe.co)** - for the design inspiration and the community spirit
 
 ---
 

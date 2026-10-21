@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 },
   title: "NoodleHub - The Musician's Toolkit",
   description:
-    "NoodleHub is a toolkit for musicians. Chord finder, scale explorer, metronome, BPM tapper, circle of fifths, fretboard visualizer, and more — all in your browser.",
+    "NoodleHub is a toolkit for musicians. Chord finder, scale explorer, metronome, BPM tapper, circle of fifths, fretboard visualizer, and more, all in your browser.",
   keywords: [
     "music tools",
     "musician tools",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "NoodleHub — Free Musician Tools",
+    title: "NoodleHub: Free Musician Tools",
     description:
       "A free, open-source toolkit for musicians: chord finder, scale explorer, metronome, circle of fifths, fretboard visualizer, and more.",
   },

@@ -11,11 +11,11 @@ import { cn } from "@/lib/utils";
 const TONICS = ["C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#", "Ab", "A", "A#", "Bb", "B"];
 
 const POPULAR_PROGRESSION_NAMES: { name: string; description: string }[] = [
-  { name: "I-V-vi-IV", description: "The 'pop punk' progression — used in countless hits" },
+  { name: "I-V-vi-IV", description: "The 'pop punk' progression, used in countless hits" },
   { name: "I-IV-V-I", description: "Classic rock 'n' roll / blues turnaround" },
   { name: "I-vi-IV-V", description: "The '50s' doo-wop progression" },
   { name: "vi-IV-I-V", description: "Same four chords, starting on the relative minor" },
-  { name: "I-IV-vi-V", description: "Sensitive, hopeful — modern pop favourite" },
+  { name: "I-IV-vi-V", description: "Sensitive and hopeful, a modern pop favourite" },
 ];
 
 export function ChordProgressions() {
@@ -208,7 +208,7 @@ export function ChordProgressions() {
             Uppercase numerals (I, IV, V) are <strong>major</strong> chords.
             Lowercase numerals (ii, iii, vi) are <strong>minor</strong> chords.
             Lowercase with ° (vii°) is <strong>diminished</strong>.
-            In a minor key, the patterns shift — i, iv, v are minor; III, VI, VII are major.
+            In a minor key, the patterns shift: i, iv, v are minor; III, VI, VII are major.
           </p>
         </div>
       </div>
