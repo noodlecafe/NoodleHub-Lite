@@ -4,22 +4,27 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* NoodleHub palette - noodlecafé-inspired */
-  --color-cream: #F9F7F2;
-  --color-cream-deep: #F2EFE7;
-  --color-ink: #1A1A1A;
-  --color-ink-soft: #555555;
-  --color-noodle-blue: #1A4BEB;
-  --color-noodle-blue-deep: #0047AB;
-  --color-noodle-pink: #F4A6B8;
-  --color-noodle-yellow: #FFD600;
-  --color-noodle-yellow-soft: #FFE770;
+  /* NoodleHub palette - dark arcade: night background, pixel type, neon accents.
+     "cream" = page surface, "ink" = text colour (names kept so every tool re-themes at once). */
+  --color-cream: #1C1C20;
+  --color-cream-deep: #2A2A31;
+  --color-ink: #F4EEE6;
+  --color-ink-soft: #A9A5B5;
+  --color-noodle-blue: #8FA6FF;
+  --color-noodle-blue-deep: #7C93F5;
+  --color-noodle-pink: #F0347E;
+  --color-noodle-yellow: #F7E35E;
+  --color-noodle-yellow-soft: #FBEE9A;
+  --color-noodle-lavender: #CDC6F5;
+  --color-paper: #FAF1E7;
+  --color-coal: #17171B;
+  --color-surface: #242429;
 
   /* shadcn tokens mapped to noodle palette */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
-  --font-display: var(--font-anton);
+  --font-display: var(--font-pixel);
   --font-mono: var(--font-geist-mono);
 
   --color-sidebar-ring: var(--sidebar-ring);
@@ -58,56 +63,41 @@
 }
 
 :root {
-  /* NoodleHub tokens (noodlecafé-inspired) */
-  --radius: 0.625rem;
+  --radius: 1rem;
+  --line: rgba(255, 255, 255, 0.1);
 
-  /* Base surfaces - warm cream instead of pure white */
-  --background: #F9F7F2;
-  --foreground: #1A1A1A;
-  --card: #FFFFFF;
-  --card-foreground: #1A1A1A;
-  --popover: #FFFFFF;
-  --popover-foreground: #1A1A1A;
-
-  /* Primary = deep noodle blue */
-  --primary: #1A4BEB;
-  --primary-foreground: #FFFFFF;
-
-  /* Secondary = soft cream */
-  --secondary: #F2EFE7;
-  --secondary-foreground: #1A1A1A;
-
-  /* Muted = neutral cream */
-  --muted: #F2EFE7;
-  --muted-foreground: #555555;
-
-  /* Accent = noodle yellow (bold interactive accents) */
-  --accent: #FFD600;
-  --accent-foreground: #1A1A1A;
-
-  /* Destructive */
-  --destructive: #DC2626;
+  --background: #1C1C20;
+  --foreground: #F4EEE6;
+  --card: #242429;
+  --card-foreground: #F4EEE6;
+  --popover: #242429;
+  --popover-foreground: #F4EEE6;
+  --primary: #F7E35E;
+  --primary-foreground: #17171B;
+  --secondary: #2A2A31;
+  --secondary-foreground: #F4EEE6;
+  --muted: #2A2A31;
+  --muted-foreground: #A9A5B5;
+  --accent: #2F2F37;
+  --accent-foreground: #F4EEE6;
+  --destructive: #F0347E;
   --destructive-foreground: #FFFFFF;
-
-  --border: #1A1A1A;
-  --input: #1A1A1A;
-  --ring: #1A4BEB;
-
-  /* Charts - noodle palette */
-  --chart-1: #1A4BEB;
-  --chart-2: #F4A6B8;
-  --chart-3: #FFD600;
-  --chart-4: #0047AB;
-  --chart-5: #555555;
-
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #1A1A1A;
-  --sidebar-primary: #1A4BEB;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #FFD600;
-  --sidebar-accent-foreground: #1A1A1A;
-  --sidebar-border: #1A1A1A;
-  --sidebar-ring: #1A4BEB;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.14);
+  --ring: #F7E35E;
+  --chart-1: #F7E35E;
+  --chart-2: #F0347E;
+  --chart-3: #8FA6FF;
+  --chart-4: #CDC6F5;
+  --chart-5: #A9A5B5;
+  --sidebar: #242429;
+  --sidebar-foreground: #F4EEE6;
+  --sidebar-primary: #F7E35E;
+  --sidebar-primary-foreground: #17171B;
+  --sidebar-accent: #2F2F37;
+  --sidebar-accent-foreground: #F4EEE6;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #F7E35E;
 }
 
 .dark {
@@ -145,159 +135,162 @@
   --sidebar-ring: #1A4BEB;
 }
 
-* {
-  border-color: var(--border);
+@layer base {
+  * {
+    border-color: var(--border);
+  }
 }
 
 body {
-  background-color: var(--background);
+  background-color: #1C1C20;
+  /* soft spotlight glow, like a stage at night */
+  background-image: radial-gradient(ellipse 90% 70% at 50% 35%, #2C2C32 0%, #1C1C20 55%, #161619 100%);
+  background-attachment: fixed;
   color: var(--foreground);
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-/* Anton display heading utility */
+/* Pixel display type with arcade letter-spacing */
 .font-display {
-  font-family: var(--font-anton), sans-serif;
-  letter-spacing: -0.01em;
+  font-family: var(--font-pixel), monospace;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
 }
 
-/* Noodle-style hard shadow */
-.noodle-shadow {
-  box-shadow: 4px 4px 0 0 #1A1A1A;
-}
-.noodle-shadow-sm {
-  box-shadow: 2px 2px 0 0 #1A1A1A;
-}
-.noodle-shadow-lg {
-  box-shadow: 6px 6px 0 0 #1A1A1A;
-}
-.noodle-shadow-blue {
-  box-shadow: 4px 4px 0 0 #1A4BEB;
-}
-.noodle-shadow-pink {
-  box-shadow: 4px 4px 0 0 #F4A6B8;
-}
+/* ---- Dark-theme adjustments for utility colours used across the tools ----
+   These are unlayered so they win over Tailwind utilities. */
+.border-ink { border-color: var(--line); }
+.border-ink\/30, .border-ink\/20 { border-color: rgba(255, 255, 255, 0.07); }
+.bg-white { background-color: var(--color-surface); }
+.bg-white\/10 { background-color: rgba(255, 255, 255, 0.08); }
+.hover\:bg-cream-deep:hover, .hover\:bg-amber-50:hover, .hover\:bg-zinc-700:hover { background-color: #34343C; }
 
-/* Tilt utility for playful noodlecafé vibe */
-.tilt-left {
-  transform: rotate(-2deg);
+/* Text on light accent fills is dark */
+:is(.bg-noodle-yellow, .bg-noodle-yellow-soft, .bg-noodle-blue, .bg-noodle-lavender, .bg-paper, .noodle-btn),
+:is(.bg-noodle-yellow, .bg-noodle-yellow-soft, .bg-noodle-blue, .bg-noodle-lavender, .bg-paper, .noodle-btn) :is(.text-ink, .text-white, .text-ink-soft, .text-ink\/60) {
+  color: var(--color-coal);
 }
-.tilt-right {
-  transform: rotate(2deg);
-}
+:is(.bg-noodle-yellow, .bg-noodle-blue, .bg-paper) .text-ink-soft { color: rgba(23, 23, 27, 0.65); }
+.bg-noodle-pink, .bg-noodle-pink :is(.text-ink, .text-ink-soft) { color: #FFFFFF; }
 
-/* Black-bordered card style */
+/* Feedback colours tuned for dark */
+.text-red-600, .text-red-700 { color: #FF6B9D; }
+.text-green-700 { color: #7FE3A8; }
+.bg-red-100 { background-color: rgba(240, 52, 126, 0.15); }
+.bg-green-100 { background-color: rgba(127, 227, 168, 0.13); }
+.border-red-700 { border-color: #F0347E; }
+.border-green-700 { border-color: #7FE3A8; }
+
+/* Soft depth instead of hard offset shadows */
+.noodle-shadow { box-shadow: 0 14px 36px -18px rgba(0, 0, 0, 0.8); }
+.noodle-shadow-sm { box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.7); }
+.noodle-shadow-lg { box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.9); }
+.noodle-shadow-blue { box-shadow: 0 0 24px -6px rgba(143, 166, 255, 0.55); }
+.noodle-shadow-pink { box-shadow: 0 0 24px -6px rgba(240, 52, 126, 0.55); }
+
+/* Neon glows */
+.glow-yellow { box-shadow: 0 0 18px -2px rgba(247, 227, 94, 0.7); }
+.glow-pink { box-shadow: 0 0 18px -2px rgba(240, 52, 126, 0.7); }
+.glow-white { box-shadow: 0 0 14px rgba(255, 255, 255, 0.6); }
+.text-glow { text-shadow: 0 0 18px rgba(247, 227, 94, 0.55); }
+
+.tilt-left { transform: rotate(-2deg); }
+.tilt-right { transform: rotate(2deg); }
+
+/* Cards: soft, rounded, barely-there edge */
 .noodle-card {
-  background: var(--card);
-  border: 2px solid #1A1A1A;
-  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)), var(--color-surface);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
 }
 
-/* Bold black pill button */
+/* Pill buttons: neon yellow with a glow */
 .noodle-btn {
-  background: #FFD600;
-  color: #1A1A1A;
-  border: 2px solid #1A1A1A;
+  background: #F7E35E;
+  color: #17171B;
+  border: 0;
   border-radius: 9999px;
   padding: 0.75rem 1.5rem;
-  font-weight: 700;
-  box-shadow: 3px 3px 0 0 #1A1A1A;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  font-weight: 800;
+  box-shadow: 0 0 0 0 rgba(247, 227, 94, 0), 0 8px 24px -10px rgba(247, 227, 94, 0.6);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
   cursor: pointer;
 }
 .noodle-btn:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 0 #1A1A1A;
+  transform: translateY(-1px);
+  box-shadow: 0 0 22px -2px rgba(247, 227, 94, 0.65);
 }
-.noodle-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 0 #1A1A1A;
+.noodle-btn:active { transform: translateY(1px) scale(0.98); }
+.noodle-btn:disabled { opacity: 0.4; box-shadow: none; }
+.noodle-btn-blue { background: #8FA6FF; color: #17171B; box-shadow: 0 8px 24px -10px rgba(143, 166, 255, 0.6); }
+.noodle-btn-blue:hover { box-shadow: 0 0 22px -2px rgba(143, 166, 255, 0.65); }
+.noodle-btn-pink { background: #F0347E; color: #FFFFFF; box-shadow: 0 8px 24px -10px rgba(240, 52, 126, 0.6); }
+.noodle-btn-pink:hover { box-shadow: 0 0 22px -2px rgba(240, 52, 126, 0.65); }
+
+/* Pixel label chip, e.g. "AD" pills */
+.pixel-chip {
+  font-family: var(--font-pixel), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.8rem 0.4rem;
+  border-radius: 9999px;
 }
 
-.noodle-btn-blue {
-  background: #1A4BEB;
-  color: #FFFFFF;
-}
-.noodle-btn-pink {
-  background: #F4A6B8;
-  color: #1A1A1A;
-}
-
-/* Piano key styles */
-.piano-key-white {
-  background: #FFFFFF;
-  border: 2px solid #1A1A1A;
-  border-radius: 0 0 4px 4px;
-}
-.piano-key-white:hover {
-  background: #FFF9E0;
-}
-.piano-key-white.active {
-  background: #FFD600;
-}
-.piano-key-black {
-  background: #1A1A1A;
-  border: 1px solid #1A1A1A;
-  border-radius: 0 0 3px 3px;
-}
-.piano-key-black:hover {
-  background: #333333;
-}
-.piano-key-black.active {
-  background: #1A4BEB;
-}
+/* Piano keys: cream ivories, coal sharps */
+.piano-key-white { background: #FAF1E7; border: 1px solid #17171B; border-radius: 0 0 6px 6px; }
+.piano-key-white:hover { background: #FFF8EC; }
+.piano-key-white.active { background: #F7E35E; }
+.piano-key-black { background: #17171B; border: 1px solid #000; border-radius: 0 0 5px 5px; }
+.piano-key-black:hover { background: #2E2E35; }
+.piano-key-black.active { background: #F0347E; }
 
 /* Custom scrollbar */
-.scrollbar-noodle::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-.scrollbar-noodle::-webkit-scrollbar-track {
-  background: #F2EFE7;
-}
-.scrollbar-noodle::-webkit-scrollbar-thumb {
-  background: #1A1A1A;
-  border-radius: 4px;
-}
-.scrollbar-noodle::-webkit-scrollbar-thumb:hover {
-  background: #1A4BEB;
-}
+.scrollbar-noodle::-webkit-scrollbar { width: 8px; height: 8px; }
+.scrollbar-noodle::-webkit-scrollbar-track { background: #1C1C20; }
+.scrollbar-noodle::-webkit-scrollbar-thumb { background: #3A3A42; border-radius: 4px; }
+.scrollbar-noodle::-webkit-scrollbar-thumb:hover { background: #F7E35E; }
 
 /* Marquee animation for the hero ticker */
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-}
+.animate-marquee { animation: marquee 30s linear infinite; }
 
 /* Floating decorative shapes */
 @keyframes float-slow {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-12px) rotate(3deg); }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 @keyframes float-medium {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(-4deg); }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
 }
-.animate-float-slow {
-  animation: float-slow 6s ease-in-out infinite;
-}
-.animate-float-medium {
-  animation: float-medium 4.5s ease-in-out infinite;
-}
+.animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+.animate-float-medium { animation: float-medium 4.5s ease-in-out infinite; }
 
-/* Subtle background grid for the hero */
+/* Pixel blink for little arcade details */
+@keyframes pixel-blink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0.25; } }
+.animate-blink { animation: pixel-blink 1.4s steps(1) infinite; }
+
+/* Faint pixel grid behind the hero */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(26, 26, 26, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(26, 26, 26, 0.05) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-/* Confetti dots pattern */
-.bg-dots {
-  background-image: radial-gradient(circle, rgba(26, 75, 235, 0.15) 1.5px, transparent 1.5px);
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
   background-size: 24px 24px;
 }
+
+.bg-dots {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+/* Dashed "measure line" accent from the posters */
+.dash-line { border-top: 2px dashed #F7E35E; }
+
+/* Icon tiles light up when their card is hovered */
+.group:hover .hover-glow-yellow { box-shadow: 0 0 22px -2px rgba(247, 227, 94, 0.7); }
+.group:hover .hover-glow-blue { box-shadow: 0 0 22px -2px rgba(143, 166, 255, 0.7); }
+.group:hover .hover-glow-pink { box-shadow: 0 0 22px -2px rgba(240, 52, 126, 0.7); }

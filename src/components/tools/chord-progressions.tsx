@@ -154,7 +154,7 @@ export function ChordProgressions() {
                 >
                   <div className="flex items-start justify-between gap-4 mb-3 flex-wrap">
                     <div>
-                      <div className="font-display text-2xl uppercase">{prog.name}</div>
+                      <div className="font-display text-xl uppercase">{prog.name}</div>
                       {popularMatch && (
                         <p className="text-sm text-ink-soft mt-1">
                           {popularMatch.description}
@@ -188,7 +188,7 @@ export function ChordProgressions() {
                             : "bg-cream-deep hover:bg-noodle-pink",
                         )}
                       >
-                        <div className="font-display text-xl">{c.name}</div>
+                        <div className="font-display text-lg">{c.name}</div>
                         <div className="text-[10px] text-ink-soft mt-1">
                           {c.notes.length} notes
                         </div>
@@ -203,7 +203,7 @@ export function ChordProgressions() {
 
         {/* Educational note */}
         <div className="border-2 border-ink rounded-xl p-5 bg-noodle-yellow/10">
-          <h4 className="font-display text-xl uppercase mb-2">How Roman Numerals Work</h4>
+          <h4 className="font-display text-lg uppercase mb-2">How Roman Numerals Work</h4>
           <p className="text-sm text-ink-soft">
             Uppercase numerals (I, IV, V) are <strong>major</strong> chords.
             Lowercase numerals (ii, iii, vi) are <strong>minor</strong> chords.

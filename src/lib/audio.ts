@@ -1,61 +1,69 @@
 /**
- * Audio engine using Tone.js for instant browser playback.
- * Used for chord playback, metronome clicks, scale playback, etc.
+ * Audio engine using Tone.js samplers for real-instrument playback.
+ * Piano: Salamander Grand Piano (Alexander Holm, CC-BY 3.0)
+ * Guitar: acoustic guitar from tonejs-instruments (Nicholaus Brosowsky, CC-BY 3.0)
+ * Samples live in /public/samples and are pitch-shifted to fill in the gaps.
  */
 
 import * as Tone from "tone";
 
-let synth: Tone.PolySynth | null = null;
-let monoSynth: Tone.Synth | null = null;
-let initialized = false;
+export type Instrument = "piano" | "guitar";
 
-export async function initAudio() {
-  if (initialized) return;
-  await Tone.start();
-  synth = new Tone.PolySynth(Tone.Synth, {
-    oscillator: { type: "triangle" },
-    envelope: {
-      attack: 0.02,
-      decay: 0.2,
-      sustain: 0.3,
-      release: 1,
-    },
-  }).toDestination();
-  synth.volume.value = -8;
-  monoSynth = new Tone.Synth({
-    oscillator: { type: "square" },
-    envelope: {
-      attack: 0.001,
-      decay: 0.05,
-      sustain: 0,
-      release: 0.05,
-    },
-  }).toDestination();
-  monoSynth.volume.value = -10;
-  initialized = true;
+const PIANO_NOTES = ["C", "Ds", "Fs", "A"].flatMap((n) => [1, 2, 3, 4, 5, 6].map((o) => `${n}${o}`)).concat("C7");
+const GUITAR_NOTES = ["E2", "G2", "As2", "Cs3", "E3", "G3", "As3", "Cs4", "E4", "G4", "As4", "Cs5"];
+
+const toUrls = (notes: string[]) =>
+  Object.fromEntries(notes.map((n) => [n.replace("s", "#"), `${n}.mp3`]));
+
+let samplers: Record<Instrument, Tone.Sampler> | null = null;
+let woodblock: Tone.MembraneSynth | null = null;
+let loading: Promise<void> | null = null;
+
+export function initAudio(): Promise<void> {
+  if (!loading) {
+    loading = (async () => {
+      await Tone.start();
+      // A touch of room reverb so notes bloom instead of sounding dry.
+      const reverb = new Tone.Reverb({ decay: 2.4, wet: 0.22 }).toDestination();
+      samplers = {
+        piano: new Tone.Sampler({ urls: toUrls(PIANO_NOTES), baseUrl: "/samples/piano/", release: 1.2 }).connect(reverb),
+        guitar: new Tone.Sampler({ urls: toUrls(GUITAR_NOTES), baseUrl: "/samples/guitar/", release: 0.8 }).connect(reverb),
+      };
+      samplers.piano.volume.value = 0;
+      samplers.guitar.volume.value = 0;
+      woodblock = new Tone.MembraneSynth({
+        pitchDecay: 0.008,
+        octaves: 2,
+        envelope: { attack: 0.0005, decay: 0.07, sustain: 0, release: 0.02 },
+      }).toDestination();
+      await Tone.loaded();
+    })();
+  }
+  return loading;
 }
 
 export function isAudioReady() {
-  return initialized;
+  return samplers !== null;
 }
 
 /**
- * Play a list of notes simultaneously (a chord).
- * Notes should be in scientific pitch notation, e.g. ["C4", "E4", "G4"]
+ * Play a list of notes together (a chord), e.g. ["C4", "E4", "G4"].
+ * Guitar chords are strummed low-to-high; piano chords get a slight human roll.
  */
-export async function playChord(notes: string[], duration: string = "1n") {
+export async function playChord(notes: string[], duration: string = "1n", instrument: Instrument = "piano", time?: number) {
   await initAudio();
-  if (!synth) return;
-  synth.triggerAttackRelease(notes, duration);
+  const s = samplers![instrument];
+  const start = time ?? Tone.now();
+  const spread = instrument === "guitar" ? 0.035 : 0.008;
+  notes.forEach((n, i) => s.triggerAttackRelease(n, duration, start + i * spread, instrument === "guitar" ? 0.85 : 0.7));
 }
 
 /**
  * Play a single note.
  */
-export async function playNote(note: string, duration: string = "8n") {
+export async function playNote(note: string, duration: string = "8n", instrument: Instrument = "piano") {
   await initAudio();
-  if (!synth) return;
-  synth.triggerAttackRelease(note, duration);
+  samplers![instrument].triggerAttackRelease(note, duration, undefined, 0.75);
 }
 
 /**
@@ -67,74 +75,24 @@ export async function playSequence(
   items: (string | string[])[],
   interval: string = "4n",
   noteDuration?: string,
+  instrument: Instrument = "piano",
 ) {
   await initAudio();
-  if (!synth) return;
   const now = Tone.now();
+  const step = Tone.Time(interval).toSeconds();
   items.forEach((item, i) => {
-    const time = now + i * Tone.Time(interval).toSeconds();
-    const dur = noteDuration || interval;
-    if (Array.isArray(item)) {
-      synth!.triggerAttackRelease(item, dur, time);
-    } else {
-      synth!.triggerAttackRelease(item, dur, time);
-    }
+    const notes = Array.isArray(item) ? item : [item];
+    playChord(notes, noteDuration || interval, instrument, now + i * step);
   });
 }
 
 /**
- * Schedule a metronome click. Returns a stop function.
+ * Woodblock-style metronome click. Pass a Transport time when scheduling.
  */
-export function startMetronome(
-  bpm: number,
-  beatsPerMeasure: number = 4,
-  onBeat?: (beat: number) => void,
-): () => void {
-  // Start audio if not already
-  initAudio().then(() => {
-    if (!monoSynth) return;
-    Tone.getTransport().bpm.value = bpm;
-    let beatCount = 0;
-    // Clear any previous schedule
-    Tone.getTransport().cancel(0);
-    Tone.getTransport().scheduleRepeat((time) => {
-      const isDownbeat = beatCount % beatsPerMeasure === 0;
-      monoSynth!.volume.value = isDownbeat ? -6 : -12;
-      monoSynth!.triggerAttackRelease(isDownbeat ? "C5" : "C4", "32n", time);
-      // Use draw for UI sync
-      Tone.getDraw().schedule(() => {
-        if (onBeat) onBeat(beatCount % beatsPerMeasure);
-      }, time);
-      beatCount++;
-    }, "4n");
-    Tone.getTransport().start();
-  });
-
-  // Return stop function
-  return () => {
-    Tone.getTransport().stop();
-    Tone.getTransport().cancel(0);
-  };
-}
-
-export function stopMetronome() {
-  Tone.getTransport().stop();
-  Tone.getTransport().cancel(0);
-}
-
-export function setMetronomeBpm(bpm: number) {
-  Tone.getTransport().bpm.value = bpm;
-}
-
-/**
- * Metronome tick using a one-off click (not transport-scheduled).
- * Used by tools that drive their own timer.
- */
-export async function clickTick(accent: boolean = false) {
+export async function clickTick(accent: boolean = false, time?: number) {
   await initAudio();
-  if (!monoSynth) return;
-  monoSynth.volume.value = accent ? -6 : -12;
-  monoSynth.triggerAttackRelease(accent ? "C5" : "C4", "32n");
+  woodblock!.volume.value = accent ? -2 : -9;
+  woodblock!.triggerAttackRelease(accent ? "A5" : "E5", "32n", time);
 }
 
 /**

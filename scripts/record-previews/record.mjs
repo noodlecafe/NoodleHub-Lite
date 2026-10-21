@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 import { writeFileSync, mkdirSync, renameSync } from "fs";
 
-const VW = 1100, VH = 960;
+const VW = 1100, VH = 1150;
 const only = process.argv[2];
 mkdirSync("raw", { recursive: true });
 
@@ -40,7 +40,7 @@ const audioTap = () => {
 };
 
 const cursorCss = `#__cur{position:fixed;z-index:99999;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;
- background:rgba(255,214,0,.85);border:2px solid #1A1A1A;pointer-events:none;transition:left .45s ease,top .45s ease,transform .12s}
+ background:rgba(255,255,255,.9);border:2px solid #F7E35E;box-shadow:0 0 14px rgba(247,227,94,.8);pointer-events:none;transition:left .45s ease,top .45s ease,transform .12s}
  #__cur.down{transform:scale(.7)}`;
 
 async function setup(page, title) {
@@ -75,7 +75,7 @@ async function clickXY(page, x, y, after = 600) {
   await page.waitForTimeout(after);
 }
 async function click(page, locator, after) {
-  const l = locator.first(); if (process.env.DBG) console.log("click", String(locator));
+  const l = locator.first();
   await l.evaluate((el) => el.scrollIntoView({ block: "nearest" }), null, { timeout: 5000 });
   const b = await l.boundingBox({ timeout: 5000 });
   await clickXY(page, b.x + b.width / 2, b.y + b.height / 2, after);
@@ -153,7 +153,9 @@ const SCRIPTS = {
   fretboard: ["Fretboard Visualizer", async (p) => {
     await click(p, btn(p, "A"), 500);
     await click(p, btn(p, "Minor Pentatonic"), 1500);
-    await click(p, btn(p, "Blues"), 1500);
+    await click(p, btn(p, "Blues"), 900);
+    const roots = card(p).locator('svg g.cursor-pointer:has(circle[fill="#F7E35E"])');
+    for (const i of [0, 2, 4, 6]) await click(p, roots.nth(i), 750);
     await click(p, btn(p, "E"), 500);
     await click(p, btn(p, "Mixolydian"), 1500);
     await click(p, p.getByRole("button", { name: /^chord$/i }), 1800);

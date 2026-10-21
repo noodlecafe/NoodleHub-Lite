@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useUI, type ToolId } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { HeroLoop } from "@/components/hero-loop";
 import { LockedPreview, CHECKOUT_URL, type LockedTool } from "@/components/locked-preview";
 import { LOCKED_CONTENT } from "@/components/locked-tools";
 
@@ -136,12 +137,36 @@ const TOOLS: ToolMeta[] = [
 ];
 
 const colorMap = {
-  blue: { bg: "bg-noodle-blue", text: "text-white", hover: "hover:bg-noodle-blue-deep" },
-  yellow: { bg: "bg-noodle-yellow", text: "text-ink", hover: "hover:bg-noodle-yellow-soft" },
-  pink: { bg: "bg-noodle-pink", text: "text-ink", hover: "hover:bg-rose-300" },
+  blue: { bg: "bg-noodle-blue", glow: "hover-glow-blue" },
+  yellow: { bg: "bg-noodle-yellow", glow: "hover-glow-yellow" },
+  pink: { bg: "bg-noodle-pink", glow: "hover-glow-pink" },
 };
 
 const CATEGORIES = ["Theory", "Practice", "Reference"] as const;
+
+const TICKER = ["Chords", "Scales", "Rhythm", "Ear Training", "Fretboard", "Theory", "Tempo", "Keys"];
+
+/** Little blinking pixel sparkles scattered behind the hero. */
+function PixelSparkles() {
+  const dots = [
+    { c: "bg-noodle-yellow", p: "top-16 left-[8%]", d: "0s" },
+    { c: "bg-noodle-pink", p: "top-40 right-[6%]", d: ".4s" },
+    { c: "bg-noodle-lavender", p: "bottom-24 left-[46%]", d: ".9s" },
+    { c: "bg-noodle-blue", p: "top-24 left-[52%]", d: "1.2s" },
+    { c: "bg-noodle-yellow", p: "bottom-16 right-[30%]", d: ".6s" },
+  ];
+  return (
+    <>
+      {dots.map((d, i) => (
+        <span
+          key={i}
+          className={cn("absolute w-2 h-2 animate-blink hidden sm:block", d.c, d.p)}
+          style={{ animationDelay: d.d }}
+        />
+      ))}
+    </>
+  );
+}
 
 export function Home() {
   const setTool = useUI((s) => s.setTool);
@@ -153,14 +178,12 @@ export function Home() {
       setTool(tool.id);
       return;
     }
-    const content = LOCKED_CONTENT[tool.id];
-    const colors = colorMap[tool.color];
     setLocked({
       title: tool.title,
       description: tool.description,
       icon: tool.icon,
-      accent: cn(colors.bg, colors.text),
-      features: content?.features ?? [],
+      accent: colorMap[tool.color].bg,
+      features: LOCKED_CONTENT[tool.id]?.features ?? [],
       video: `/previews/${tool.id}.mp4`,
       poster: `/previews/${tool.id}.jpg`,
     });
@@ -171,29 +194,20 @@ export function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* NAV */}
-      <header className="border-b-2 border-ink bg-cream sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <button
-            onClick={() => setTool("home")}
-            className="flex items-center gap-2 group"
-          >
-            <img
-	  src="/noodlehub-logo2.png"
-	  alt="NoodleHub"
-	  className="h-20 w-auto object-contain"
-	/>
+      <header className="border-b border-ink bg-cream/70 backdrop-blur-md sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+          <button onClick={() => setTool("home")} className="flex items-center gap-2 group">
+            <img src="/noodlehub-logo2.png" alt="NoodleHub" className="h-16 sm:h-20 w-auto object-contain" />
           </button>
 
           <nav className="hidden sm:flex items-center gap-1">
-            {CATEGORIES.map((cat) => (
+            {(["All", ...CATEGORIES] as const).map((cat) => (
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
                 className={cn(
-                  "px-3 py-1.5 text-sm font-bold uppercase tracking-wide rounded-full transition-colors",
-                  filter === cat
-                    ? "bg-ink text-cream"
-                    : "text-ink-soft hover:bg-cream-deep",
+                  "font-display px-3 py-2 text-[10px] uppercase rounded-full transition-colors",
+                  filter === cat ? "bg-noodle-yellow" : "text-ink-soft hover:text-ink",
                 )}
               >
                 {cat}
@@ -203,16 +217,16 @@ export function Home() {
               href="https://discord.gg/HNuTZVrRWw"
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-2 noodle-btn text-sm flex items-center gap-1"
+              className="ml-3 noodle-btn noodle-btn-pink text-sm flex items-center gap-1"
             >
-              <span>. ₊˚ ☎︎₊˚✧ Join Our Discord</span>
+              <span>Join Our Discord</span>
               <ArrowUpRight className="h-4 w-4" />
             </a>
             <a
               href={CHECKOUT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-2 noodle-btn noodle-btn-blue text-sm flex items-center gap-1"
+              className="ml-2 noodle-btn text-sm flex items-center gap-1"
             >
               Unlock All Tools
               <ArrowUpRight className="h-4 w-4" />
@@ -222,35 +236,23 @@ export function Home() {
       </header>
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-cream bg-grid">
-        {/* Floating decorative shapes */}
-        <div className="absolute top-12 right-[10%] w-24 h-24 bg-noodle-pink rounded-full opacity-80 animate-float-slow hidden sm:block" />
-        <div className="absolute top-32 right-[8%] w-0 h-0 border-l-[24px] border-l-transparent border-r-[24px] border-r-transparent border-b-[42px] border-b-noodle-blue animate-float-medium hidden sm:block" />
-        <div className="absolute bottom-20 left-[5%] w-16 h-16 border-4 border-noodle-blue rotate-12 animate-float-medium hidden lg:block" />
-        <div className="absolute top-24 left-[40%] w-12 h-12 bg-noodle-yellow rounded-full opacity-90 animate-float-slow hidden lg:block" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 relative">
+      <section className="relative overflow-hidden bg-grid">
+        <PixelSparkles />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20 relative">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 bg-white border-2 border-ink rounded-full noodle-shadow-sm">
-                <span className="w-2 h-2 bg-noodle-blue rounded-full animate-pulse" />
-                <span className="text-xs font-bold uppercase tracking-wider">
-                  NoodleHub Lite · 3 Free Tools
-                </span>
+              <div className="font-display text-[10px] sm:text-xs uppercase text-noodle-yellow text-glow mb-6">
+                NoodleHub Lite · 3 Free Tools
               </div>
 
-              <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl uppercase leading-[0.95] mb-6">
-                All the tools a{" "}
-                <span className="relative inline-block">
-                  <span className="relative z-10">musician</span>
-                  <span className="absolute inset-x-0 bottom-1 h-4 bg-noodle-yellow -z-0" />
-                </span>{" "}
-                needs.
+              <h1 className="font-display text-3xl sm:text-5xl uppercase leading-[1.25] mb-6">
+                All the tools a <span className="text-noodle-pink">musician</span> needs.
               </h1>
+              <div className="dash-line w-40 mb-6 opacity-80" />
 
               <p className="text-lg sm:text-xl text-ink-soft max-w-xl mb-8">
-                NoodleHub is a private music toolkit built for our community,
-                helping musicians explore chords, scales, rhythm, and music theory{" "}
+                NoodleHub is a private music toolkit built for our community, helping musicians
+                explore chords, scales, rhythm, and music theory{" "}
                 <span className="font-bold text-ink">in one place</span>.
               </p>
 
@@ -272,86 +274,31 @@ export function Home() {
               </div>
             </div>
 
-            {/* Hero illustration card */}
-            <div className="relative">
-              <motion.div
-                initial={{ rotate: -3, y: 10 }}
-                animate={{ rotate: -3, y: 0 }}
-                className="relative bg-noodle-blue border-2 border-ink rounded-3xl p-8 noodle-shadow-lg"
-              >
-                <div className="text-white">
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="text-xs font-bold uppercase tracking-wider opacity-80">
-                      C Major Scale
-                    </span>
-                    <span className="px-2 py-0.5 bg-noodle-yellow text-ink text-xs font-bold rounded-full">
-                      No Sharps
-                    </span>
-                  </div>
-                  <div className="font-display text-4xl mb-6">
-                    Do · Re · Mi · Fa · Sol · La · Ti · Do
-                  </div>
-                  {/* Mini piano preview */}
-                  <div className="flex gap-1 h-16">
-                    {["C", "D", "E", "F", "G", "A", "B"].map((n, i) => (
-                      <div
-                        key={n}
-                        className="flex-1 bg-white rounded-b border border-ink flex items-end justify-center pb-1"
-                      >
-                        <span className="text-[10px] font-bold text-ink">{n}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-6 grid grid-cols-3 gap-3 text-xs">
-                    <div className="bg-white/10 rounded-lg p-2">
-                      <div className="opacity-70 mb-1">Tonic</div>
-                      <div className="font-bold">C</div>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-2">
-                      <div className="opacity-70 mb-1">Mode</div>
-                      <div className="font-bold">Ionian</div>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-2">
-                      <div className="opacity-70 mb-1">Chords</div>
-                      <div className="font-bold">7 diatonic</div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Floating badges */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute -top-4 -right-4 bg-noodle-yellow border-2 border-ink rounded-2xl px-4 py-3 noodle-shadow"
-              >
-                <div className="text-xs font-bold uppercase tracking-wider">
-                  Now Playing
-                </div>
-                <div className="font-display text-lg">C Maj 7</div>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 5, repeat: Infinity }}
-                className="absolute -bottom-4 -left-4 bg-noodle-pink border-2 border-ink rounded-2xl px-4 py-3 noodle-shadow"
-              >
-                <div className="text-xs font-bold uppercase tracking-wider">
-                  Tempo
-                </div>
-                <div className="font-display text-lg">120 BPM</div>
-              </motion.div>
-            </div>
+            <HeroLoop />
           </div>
         </div>
       </section>
 
+      {/* TICKER */}
+      <div className="border-y border-ink overflow-hidden py-4 bg-coal/60">
+        <div className="flex w-max animate-marquee">
+          {[...TICKER, ...TICKER, ...TICKER, ...TICKER].map((t, i) => (
+            <span key={i} className="font-display text-xs uppercase px-6 flex items-center gap-6">
+              <span className={i % 3 === 0 ? "text-noodle-yellow" : i % 3 === 1 ? "text-noodle-pink" : "text-noodle-lavender"}>
+                {t}
+              </span>
+              <span className="w-1.5 h-1.5 bg-ink-soft/50" />
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* TOOL GRID */}
-      <section className="flex-1 bg-cream py-16 sm:py-20">
+      <section className="flex-1 py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
+          <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
             <div>
-              <h2 className="font-display text-4xl sm:text-5xl uppercase mb-2">
+              <h2 className="font-display text-2xl sm:text-3xl uppercase text-noodle-yellow text-glow mb-3">
                 The Tool Kit
               </h2>
               <p className="text-ink-soft">
@@ -364,10 +311,8 @@ export function Home() {
                   key={cat}
                   onClick={() => setFilter(cat)}
                   className={cn(
-                    "px-3 py-1.5 text-xs font-bold uppercase tracking-wide rounded-full transition-colors",
-                    filter === cat
-                      ? "bg-ink text-cream"
-                      : "bg-cream-deep text-ink-soft",
+                    "font-display px-3 py-2 text-[9px] uppercase rounded-full transition-colors",
+                    filter === cat ? "bg-noodle-yellow" : "bg-cream-deep text-ink-soft",
                   )}
                 >
                   {cat}
@@ -388,45 +333,35 @@ export function Home() {
                   transition={{ delay: i * 0.04, duration: 0.4 }}
                   onClick={() => openTool(tool)}
                   className={cn(
-                    "group relative text-left border-2 border-ink rounded-2xl p-6 noodle-shadow hover:-translate-x-1 hover:-translate-y-1 transition-transform",
-                    isLocked ? "bg-cream-deep" : "bg-white",
+                    "group relative text-left noodle-card p-6 hover:-translate-y-1 hover:border-white/20 transition-all",
+                    isLocked && "opacity-75 hover:opacity-100",
                   )}
                 >
-                  <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start justify-between mb-5">
                     <div
                       className={cn(
-                        "w-12 h-12 rounded-xl border-2 border-ink flex items-center justify-center",
+                        "w-12 h-12 rounded-xl flex items-center justify-center transition-shadow",
                         colors.bg,
-                        colors.text,
-                        isLocked && "opacity-60",
+                        colors.glow,
+                        isLocked && "saturate-50",
                       )}
                     >
                       {tool.icon}
                     </div>
                     {isLocked ? (
-                      <span className="flex items-center gap-1 px-2 py-1 bg-ink text-cream rounded-full text-[10px] font-bold uppercase tracking-wider">
+                      <span className="pixel-chip flex items-center gap-1.5 bg-coal text-ink-soft border border-ink">
                         <Lock className="h-3 w-3" />
                         Members
                       </span>
                     ) : (
-                      <ArrowUpRight className="h-5 w-5 text-ink-soft group-hover:text-ink group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      <ArrowUpRight className="h-5 w-5 text-ink-soft group-hover:text-noodle-yellow group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                     )}
                   </div>
-                  <h3 className="font-display text-2xl uppercase mb-2">
-                    {tool.title}
-                  </h3>
-                  <p className="text-ink-soft text-sm leading-relaxed">
-                    {tool.description}
-                  </p>
-                  <div className="mt-4 flex gap-2">
-                    <span className="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-cream-deep text-ink-soft rounded-full">
-                      {tool.category}
-                    </span>
-                    {!isLocked && (
-                      <span className="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-noodle-yellow text-ink rounded-full">
-                        Free
-                      </span>
-                    )}
+                  <h3 className="font-display text-sm uppercase mb-3 leading-relaxed">{tool.title}</h3>
+                  <p className="text-ink-soft text-sm leading-relaxed">{tool.description}</p>
+                  <div className="mt-5 flex gap-2">
+                    <span className="pixel-chip bg-cream-deep text-ink-soft">{tool.category}</span>
+                    {!isLocked && <span className="pixel-chip bg-noodle-yellow">Free</span>}
                   </div>
                 </motion.button>
               );
@@ -438,46 +373,37 @@ export function Home() {
       <LockedPreview tool={locked} onClose={() => setLocked(null)} />
 
       {/* FOOTER */}
-      <footer className="bg-ink text-cream py-12 mt-auto">
+      <footer className="border-t border-ink bg-coal/70 py-12 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid sm:grid-cols-3 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="font-display text-xl uppercase">NoodleHub</span>
-              </div>
-              <p className="text-cream/70 text-sm">
-                Music Tools made by a passionate musician, 
-		for passionate musicians.🤘
+              <div className="font-display text-sm uppercase text-noodle-yellow mb-4">NoodleHub</div>
+              <p className="text-ink-soft text-sm">
+                Music tools made by a passionate musician, for passionate musicians. 🤘
               </p>
             </div>
             <div>
-              <h4 className="font-bold uppercase text-sm tracking-wider mb-3">
-                Powered By
-              </h4>
-              <ul className="space-y-1 text-sm text-cream/70">
+              <h4 className="font-display text-[10px] uppercase text-noodle-pink mb-4">Powered By</h4>
+              <ul className="space-y-1 text-sm text-ink-soft">
                 <li>PyTheory · music theory engine</li>
-                <li>Tone.js · audio synthesis</li>
+                <li>Tone.js · audio playback</li>
                 <li>Tonal.js · instant client-side theory</li>
                 <li>Next.js 16 + Tailwind CSS</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold uppercase text-sm tracking-wider mb-3">
-                Inspired By
-              </h4>
-              <p className="text-sm text-cream/70">
-                The noodlecafé sessions community, a place for people
-                who want to learn music, make music, and have other
-                people around while they do it.
+              <h4 className="font-display text-[10px] uppercase text-noodle-lavender mb-4">Inspired By</h4>
+              <p className="text-sm text-ink-soft">
+                The noodlecafé sessions community, a place for people who want to learn music, make
+                music, and have other people around while they do it.
               </p>
             </div>
           </div>
-          <div className="border-t border-cream/20 pt-6 flex flex-wrap items-center justify-between gap-4">
-            <p className="text-xs text-cream/50">
-              © {new Date().getFullYear()} NoodleHub · Made by Noodlecafé 🍜
-            </p>
-            <p className="text-xs text-cream/50">
-              All tools run in your browser. No data leaves your device.
+          <div className="border-t border-ink pt-6 flex flex-wrap items-center justify-between gap-4">
+            <p className="text-xs text-ink-soft/70">© {new Date().getFullYear()} NoodleHub · Made by Noodlecafé 🍜</p>
+            <p className="text-xs text-ink-soft/70">
+              Piano: Salamander Grand Piano by Alexander Holm · Guitar: tonejs-instruments by Nicholaus
+              Brosowsky · both CC-BY 3.0
             </p>
           </div>
         </div>

@@ -24,7 +24,7 @@ for id, m in meta.items():
         and subprocess.run(["ffprobe", "-v", "error", apath]).returncode == 0
     if has_audio:
         cmd += ["-ss", f"{(start - m['audioStart']) / 1000:.3f}", "-i", apath,
-                "-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "128k", "-af", "apad,volume=-2dB", "-t", f"{(end - start) / 1000:.3f}"]
+                "-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "128k", "-af", "apad,loudnorm=I=-18:TP=-1.5:LRA=11", "-t", f"{(end - start) / 1000:.3f}"]
     cmd += ["-vf", vf, "-c:v", "libx264", "-preset", "slow", "-crf", "26", "-pix_fmt", "yuv420p", "-movflags", "+faststart", f"out/{id}.mp4"]
     subprocess.run(cmd, check=True)
     subprocess.run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-ss", "1.5", "-i", f"out/{id}.mp4", "-frames:v", "1", "-q:v", "4", f"out/{id}.jpg"], check=True)

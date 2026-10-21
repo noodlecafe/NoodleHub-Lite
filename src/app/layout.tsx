@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Anton, Geist_Mono } from "next/font/google";
+import { Inter, Press_Start_2P, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -8,8 +8,8 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const anton = Anton({
-  variable: "--font-anton",
+const pixel = Press_Start_2P({
+  variable: "--font-pixel",
   weight: "400",
   subsets: ["latin"],
 });
@@ -67,7 +67,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${anton.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${inter.variable} ${pixel.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         {children}
         <Toaster />

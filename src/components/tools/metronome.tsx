@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import * as Tone from "tone";
+import { initAudio, clickTick } from "@/lib/audio";
 
 const TIME_SIGNATURES = [
   { beats: 4, label: "4/4" },
@@ -60,18 +61,13 @@ export function Metronome() {
       setPlaying(false);
       setCurrentBeat(-1);
     } else {
-      await Tone.start();
+      await initAudio();
       Tone.getTransport().bpm.value = bpm;
       let beatCount = 0;
       Tone.getTransport().cancel(0);
       Tone.getTransport().scheduleRepeat((time) => {
         const isDownbeat = beatCount % beatsPerMeasure === 0;
-        const synth = new Tone.Synth({
-          oscillator: { type: "square" },
-          envelope: { attack: 0.001, decay: 0.04, sustain: 0, release: 0.04 },
-        }).toDestination();
-        synth.volume.value = isDownbeat ? -6 : -12;
-        synth.triggerAttackRelease(isDownbeat ? "C5" : "C4", "32n", time);
+        clickTick(isDownbeat, time);
         Tone.getDraw().schedule(() => {
           setCurrentBeat(beatCount % beatsPerMeasure);
         }, time);
@@ -99,7 +95,7 @@ export function Metronome() {
             <div
               key={i}
               className={cn(
-                "w-16 h-16 rounded-full border-2 border-ink flex items-center justify-center font-display text-2xl transition-all",
+                "w-16 h-16 rounded-full border-2 border-ink flex items-center justify-center font-display text-xl transition-all",
                 currentBeat === i
                   ? i === 0
                     ? "bg-noodle-yellow scale-110 noodle-shadow"
@@ -114,7 +110,7 @@ export function Metronome() {
 
         {/* BPM display */}
         <div className="text-center">
-          <div className="font-display text-7xl sm:text-8xl leading-none">
+          <div className="font-display text-5xl sm:text-6xl leading-none">
             {bpm}
           </div>
           <div className="text-sm text-ink-soft mt-1">
@@ -127,7 +123,7 @@ export function Metronome() {
           <Button
             onClick={handleToggle}
             className={cn(
-              "w-24 h-24 rounded-full border-2 border-ink font-display text-xl uppercase",
+              "w-24 h-24 rounded-full border-2 border-ink font-display text-lg uppercase",
               playing
                 ? "bg-noodle-pink text-ink"
                 : "bg-noodle-yellow text-ink",
@@ -191,7 +187,7 @@ export function Metronome() {
                 key={ts.label}
                 onClick={() => setBeatsPerMeasure(ts.beats)}
                 className={cn(
-                  "px-4 py-2 border-2 border-ink rounded-lg font-display text-xl uppercase transition-colors",
+                  "px-4 py-2 border-2 border-ink rounded-lg font-display text-lg uppercase transition-colors",
                   beatsPerMeasure === ts.beats
                     ? "bg-noodle-yellow"
                     : "bg-white hover:bg-cream-deep",

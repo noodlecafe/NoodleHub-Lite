@@ -52,7 +52,7 @@ export function ToolShell({
               {icon}
             </div>
           )}
-          <h1 className="font-display text-4xl sm:text-5xl uppercase leading-none">
+          <h1 className="font-display text-2xl sm:text-3xl uppercase leading-none">
             {title}
           </h1>
         </div>

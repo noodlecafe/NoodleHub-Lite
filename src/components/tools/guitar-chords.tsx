@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { Guitar, Play, Volume2 } from "lucide-react";
 import { ToolShell } from "@/components/tool-shell";
 import { Button } from "@/components/ui/button";
-import { playChord, playNote, initAudio } from "@/lib/audio";
+import { playChord, initAudio } from "@/lib/audio";
 import { cn } from "@/lib/utils";
 
 // Common guitar chord shapes (open-position chords)
@@ -214,10 +214,8 @@ export function GuitarChords() {
         return NOTE_NAMES[pc] + octave;
       })
       .filter((n): n is string => n !== null);
-    // Play low-to-high strum
-    for (let i = 0; i < notes.length; i++) {
-      setTimeout(() => playNote(notes[i], "4n"), i * 60);
-    }
+    // Strummed low-to-high on the acoustic guitar
+    await playChord(notes, "1n", "guitar");
   };
 
   return (
@@ -240,7 +238,7 @@ export function GuitarChords() {
                 key={r}
                 onClick={() => setSelectedRoot(r)}
                 className={cn(
-                  "px-4 py-2 border-2 border-ink rounded-lg font-display text-xl uppercase transition-colors",
+                  "px-4 py-2 border-2 border-ink rounded-lg font-display text-lg uppercase transition-colors",
                   selectedRoot === r ? "bg-noodle-yellow" : "bg-white hover:bg-cream-deep",
                 )}
               >
@@ -276,7 +274,7 @@ export function GuitarChords() {
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="border-2 border-ink rounded-xl p-5 bg-white">
               <div className="flex items-center justify-between mb-4">
-                <div className="font-display text-3xl uppercase">{selectedChord.name}</div>
+                <div className="font-display text-2xl uppercase">{selectedChord.name}</div>
                 <Button onClick={handlePlayChord} className="noodle-btn" size="sm">
                   <Play className="h-4 w-4 mr-1" />
                   Play
@@ -308,7 +306,7 @@ export function GuitarChords() {
                         {f === -1 ? "×" : f}
                       </div>
                       <div className="text-xs text-ink-soft">fret</div>
-                      <div className="ml-auto font-display text-lg">
+                      <div className="ml-auto font-display text-base">
                         {note || "muted"}
                         {octave !== null && note && (
                           <span className="text-xs text-ink-soft ml-1">
@@ -360,6 +358,15 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-[260px] mx-auto">
+      <defs>
+        <filter id="dot-glow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="3.5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
       {/* Nut (thick line at top if open position) */}
       {showNut && (
         <line
@@ -367,8 +374,9 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
           y1={padY}
           x2={width - padX + 4}
           y2={padY}
-          stroke="#1A1A1A"
-          strokeWidth="6"
+          stroke="#F4EEE6"
+          strokeWidth="5"
+          strokeLinecap="round"
         />
       )}
 
@@ -380,8 +388,9 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
           y1={padY + i * fretSpacing}
           x2={width - padX}
           y2={padY + i * fretSpacing}
-          stroke="#1A1A1A"
-          strokeWidth="1"
+          stroke="#F4EEE6"
+          strokeOpacity="0.75"
+          strokeWidth="1.5"
         />
       ))}
 
@@ -393,8 +402,9 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
           y1={padY}
           x2={padX + i * stringSpacing}
           y2={padY + numFrets * fretSpacing}
-          stroke="#1A1A1A"
-          strokeWidth="1"
+          stroke="#F4EEE6"
+          strokeOpacity="0.75"
+          strokeWidth="1.5"
         />
       ))}
 
@@ -410,8 +420,8 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
             cy={y}
             r="6"
             fill="none"
-            stroke="#1A1A1A"
-            strokeWidth="1.5"
+            stroke="#F4EEE6"
+            strokeWidth="2"
           />
         ) : (
           <text
@@ -421,7 +431,7 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
             textAnchor="middle"
             fontSize="14"
             fontWeight="700"
-            fill="#1A1A1A"
+            fill="#F4EEE6"
           >
             ×
           </text>
@@ -441,9 +451,8 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
             width={Math.abs(x2 - x1) + 16}
             height="16"
             rx="8"
-            fill="#1A4BEB"
-            stroke="#1A1A1A"
-            strokeWidth="1.5"
+            fill="#F7E35E"
+            filter="url(#dot-glow)"
           />
         );
       })}
@@ -462,9 +471,8 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
               cx={x}
               cy={y}
               r="9"
-              fill="#1A4BEB"
-              stroke="#1A1A1A"
-              strokeWidth="1.5"
+              fill="#F7E35E"
+              filter="url(#dot-glow)"
             />
             <text
               x={x}
@@ -472,7 +480,7 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
               textAnchor="middle"
               fontSize="11"
               fontWeight="700"
-              fill="#FFFFFF"
+              fill="#17171B"
             >
               {finger}
             </text>
@@ -487,7 +495,7 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
           y={padY + fretSpacing * 0.7}
           fontSize="11"
           fontWeight="700"
-          fill="#1A1A1A"
+          fill="#F4EEE6"
         >
           {baseFret}fr
         </text>
@@ -502,7 +510,7 @@ function ChordDiagram({ chord }: { chord: ChordShape }) {
           textAnchor="middle"
           fontSize="10"
           fontWeight="700"
-          fill="#666666"
+          fill="#A9A5B5"
         >
           {s[0]}
         </text>

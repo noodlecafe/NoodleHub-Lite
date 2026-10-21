@@ -89,7 +89,7 @@ export function LockedPreview({
               >
                 {tool.icon}
               </div>
-              <DialogTitle className="font-display text-3xl uppercase leading-none">
+              <DialogTitle className="font-display text-lg sm:text-xl uppercase leading-snug">
                 {tool.title}
               </DialogTitle>
             </div>
