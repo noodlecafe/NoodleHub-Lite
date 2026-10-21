@@ -1,0 +1,303 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* NoodleHub palette - noodlecafé-inspired */
+  --color-cream: #F9F7F2;
+  --color-cream-deep: #F2EFE7;
+  --color-ink: #1A1A1A;
+  --color-ink-soft: #555555;
+  --color-noodle-blue: #1A4BEB;
+  --color-noodle-blue-deep: #0047AB;
+  --color-noodle-pink: #F4A6B8;
+  --color-noodle-yellow: #FFD600;
+  --color-noodle-yellow-soft: #FFE770;
+
+  /* shadcn tokens mapped to noodle palette */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-anton);
+  --font-mono: var(--font-geist-mono);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* NoodleHub tokens (noodlecafé-inspired) */
+  --radius: 0.625rem;
+
+  /* Base surfaces - warm cream instead of pure white */
+  --background: #F9F7F2;
+  --foreground: #1A1A1A;
+  --card: #FFFFFF;
+  --card-foreground: #1A1A1A;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1A1A;
+
+  /* Primary = deep noodle blue */
+  --primary: #1A4BEB;
+  --primary-foreground: #FFFFFF;
+
+  /* Secondary = soft cream */
+  --secondary: #F2EFE7;
+  --secondary-foreground: #1A1A1A;
+
+  /* Muted = neutral cream */
+  --muted: #F2EFE7;
+  --muted-foreground: #555555;
+
+  /* Accent = noodle yellow (bold interactive accents) */
+  --accent: #FFD600;
+  --accent-foreground: #1A1A1A;
+
+  /* Destructive */
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+
+  --border: #1A1A1A;
+  --input: #1A1A1A;
+  --ring: #1A4BEB;
+
+  /* Charts - noodle palette */
+  --chart-1: #1A4BEB;
+  --chart-2: #F4A6B8;
+  --chart-3: #FFD600;
+  --chart-4: #0047AB;
+  --chart-5: #555555;
+
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1A1A1A;
+  --sidebar-primary: #1A4BEB;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #FFD600;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: #1A1A1A;
+  --sidebar-ring: #1A4BEB;
+}
+
+.dark {
+  --background: #0F0F0F;
+  --foreground: #F9F7F2;
+  --card: #1A1A1A;
+  --card-foreground: #F9F7F2;
+  --popover: #1A1A1A;
+  --popover-foreground: #F9F7F2;
+  --primary: #1A4BEB;
+  --primary-foreground: #FFFFFF;
+  --secondary: #2A2A2A;
+  --secondary-foreground: #F9F7F2;
+  --muted: #2A2A2A;
+  --muted-foreground: #B0B0B0;
+  --accent: #FFD600;
+  --accent-foreground: #1A1A1A;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --border: #2A2A2A;
+  --input: #2A2A2A;
+  --ring: #1A4BEB;
+  --chart-1: #1A4BEB;
+  --chart-2: #F4A6B8;
+  --chart-3: #FFD600;
+  --chart-4: #0047AB;
+  --chart-5: #B0B0B0;
+  --sidebar: #1A1A1A;
+  --sidebar-foreground: #F9F7F2;
+  --sidebar-primary: #1A4BEB;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #FFD600;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: #2A2A2A;
+  --sidebar-ring: #1A4BEB;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Anton display heading utility */
+.font-display {
+  font-family: var(--font-anton), sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Noodle-style hard shadow */
+.noodle-shadow {
+  box-shadow: 4px 4px 0 0 #1A1A1A;
+}
+.noodle-shadow-sm {
+  box-shadow: 2px 2px 0 0 #1A1A1A;
+}
+.noodle-shadow-lg {
+  box-shadow: 6px 6px 0 0 #1A1A1A;
+}
+.noodle-shadow-blue {
+  box-shadow: 4px 4px 0 0 #1A4BEB;
+}
+.noodle-shadow-pink {
+  box-shadow: 4px 4px 0 0 #F4A6B8;
+}
+
+/* Tilt utility for playful noodlecafé vibe */
+.tilt-left {
+  transform: rotate(-2deg);
+}
+.tilt-right {
+  transform: rotate(2deg);
+}
+
+/* Black-bordered card style */
+.noodle-card {
+  background: var(--card);
+  border: 2px solid #1A1A1A;
+  border-radius: var(--radius);
+}
+
+/* Bold black pill button */
+.noodle-btn {
+  background: #FFD600;
+  color: #1A1A1A;
+  border: 2px solid #1A1A1A;
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  box-shadow: 3px 3px 0 0 #1A1A1A;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+.noodle-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 0 #1A1A1A;
+}
+.noodle-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 #1A1A1A;
+}
+
+.noodle-btn-blue {
+  background: #1A4BEB;
+  color: #FFFFFF;
+}
+.noodle-btn-pink {
+  background: #F4A6B8;
+  color: #1A1A1A;
+}
+
+/* Piano key styles */
+.piano-key-white {
+  background: #FFFFFF;
+  border: 2px solid #1A1A1A;
+  border-radius: 0 0 4px 4px;
+}
+.piano-key-white:hover {
+  background: #FFF9E0;
+}
+.piano-key-white.active {
+  background: #FFD600;
+}
+.piano-key-black {
+  background: #1A1A1A;
+  border: 1px solid #1A1A1A;
+  border-radius: 0 0 3px 3px;
+}
+.piano-key-black:hover {
+  background: #333333;
+}
+.piano-key-black.active {
+  background: #1A4BEB;
+}
+
+/* Custom scrollbar */
+.scrollbar-noodle::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-noodle::-webkit-scrollbar-track {
+  background: #F2EFE7;
+}
+.scrollbar-noodle::-webkit-scrollbar-thumb {
+  background: #1A1A1A;
+  border-radius: 4px;
+}
+.scrollbar-noodle::-webkit-scrollbar-thumb:hover {
+  background: #1A4BEB;
+}
+
+/* Marquee animation for the hero ticker */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Floating decorative shapes */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(3deg); }
+}
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(-4deg); }
+}
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+.animate-float-medium {
+  animation: float-medium 4.5s ease-in-out infinite;
+}
+
+/* Subtle background grid for the hero */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(26, 26, 26, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 26, 26, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Confetti dots pattern */
+.bg-dots {
+  background-image: radial-gradient(circle, rgba(26, 75, 235, 0.15) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
