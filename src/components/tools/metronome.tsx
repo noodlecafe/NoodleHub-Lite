@@ -74,6 +74,10 @@ export function Metronome() {
         beatCount++;
       }, "4n");
       Tone.getTransport().start();
+      stopRef.current = () => {
+        Tone.getTransport().stop();
+        Tone.getTransport().cancel(0);
+      };
       setPlaying(true);
     }
   }, [playing, bpm, beatsPerMeasure]);

@@ -52,7 +52,7 @@ export function ToolShell({
               {icon}
             </div>
           )}
-          <h1 className="font-display text-2xl sm:text-3xl uppercase leading-none">
+          <h1 className="font-display text-lg sm:text-2xl uppercase leading-snug">
             {title}
           </h1>
         </div>
@@ -61,7 +61,7 @@ export function ToolShell({
         </p>
       </header>
 
-      <div className="noodle-card p-5 sm:p-8 noodle-shadow">{children}</div>
+      <div className="tool-body noodle-card p-5 sm:p-8 noodle-shadow">{children}</div>
     </section>
   );
 }

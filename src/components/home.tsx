@@ -18,6 +18,7 @@ import {
   Sparkles,
   ArrowUpRight,
   Lock,
+  LockOpen,
 } from "lucide-react";
 import { useUI, type ToolId } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -168,6 +169,82 @@ function PixelSparkles() {
   );
 }
 
+/** "You're using 3 of 12 tools" meter: lit blocks for free tools, locked blocks for the rest. */
+function ToolMeter() {
+  return (
+    <a
+      href={CHECKOUT_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group mt-8 block max-w-md noodle-card p-4 hover:border-noodle-yellow/50 transition-colors"
+    >
+      <div className="flex items-center justify-between mb-3">
+        <span className="font-display text-[9px] uppercase text-ink-soft">
+          You&apos;re using <span className="text-noodle-yellow">3</span> of 12 tools
+        </span>
+        <span className="text-xs font-bold text-noodle-yellow group-hover:underline flex items-center gap-1">
+          Unlock the other 9 <ArrowUpRight className="h-3.5 w-3.5" />
+        </span>
+      </div>
+      <div className="grid grid-cols-12 gap-1.5">
+        {TOOLS.map((t, i) =>
+          i < FREE_TOOLS.length ? (
+            <span key={t.id} className="h-3 rounded-sm bg-noodle-yellow glow-yellow" />
+          ) : (
+            <span key={t.id} className="h-3 rounded-sm bg-cream-deep border border-ink" />
+          ),
+        )}
+      </div>
+    </a>
+  );
+}
+
+/** Members pitch shown above the tool grid. */
+function UpgradeBanner() {
+  const perks = [
+    "Name any chord you play — just click the keys",
+    "Train your ear to recognize intervals by sound",
+    "See every scale and chord across the whole fretboard",
+    "Find the key from the notes you play",
+  ];
+  return (
+    <div className="relative overflow-hidden noodle-card p-6 sm:p-8 mb-8 border-noodle-yellow/30">
+      <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-noodle-yellow/10 blur-3xl pointer-events-none" />
+      <div className="grid lg:grid-cols-[1fr_auto] gap-6 items-center relative">
+        <div>
+          <div className="font-display text-[10px] uppercase text-noodle-pink mb-3">
+            9 tools are waiting for you
+          </div>
+          <h3 className="text-2xl sm:text-3xl font-extrabold mb-4 leading-tight">
+            You&apos;ve got the basics. Members get the{" "}
+            <span className="text-noodle-yellow">whole toolkit.</span>
+          </h3>
+          <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-ink-soft">
+            {perks.map((p) => (
+              <li key={p} className="flex items-start gap-2">
+                <span className="mt-1.5 w-1.5 h-1.5 bg-noodle-yellow shrink-0" />
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="flex flex-col items-start lg:items-center gap-2">
+          <a
+            href={CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="noodle-btn text-base flex items-center gap-2 whitespace-nowrap"
+          >
+            <LockOpen className="h-5 w-5" />
+            Unlock all 12 tools
+          </a>
+          <span className="text-xs text-ink-soft">Secure checkout with Whop</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Home() {
   const setTool = useUI((s) => s.setTool);
   const [filter, setFilter] = useState<(typeof CATEGORIES)[number] | "All">("All");
@@ -200,6 +277,16 @@ export function Home() {
             <img src="/noodlehub-logo2.png" alt="NoodleHub" className="h-16 sm:h-20 w-auto object-contain" />
           </button>
 
+          <a
+            href={CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sm:hidden noodle-btn text-xs px-4 py-2 flex items-center gap-1.5"
+          >
+            <LockOpen className="h-3.5 w-3.5" />
+            Unlock all
+          </a>
+
           <nav className="hidden sm:flex items-center gap-1">
             {(["All", ...CATEGORIES] as const).map((cat) => (
               <button
@@ -214,22 +301,13 @@ export function Home() {
               </button>
             ))}
             <a
-              href="https://discord.gg/HNuTZVrRWw"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-3 noodle-btn noodle-btn-pink text-sm flex items-center gap-1"
-            >
-              <span>Join Our Discord</span>
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-            <a
               href={CHECKOUT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-2 noodle-btn text-sm flex items-center gap-1"
+              className="ml-3 noodle-btn text-sm flex items-center gap-1.5"
             >
-              Unlock All Tools
-              <ArrowUpRight className="h-4 w-4" />
+              <LockOpen className="h-4 w-4" />
+              Unlock all 12 tools
             </a>
           </nav>
         </div>
@@ -245,7 +323,7 @@ export function Home() {
                 NoodleHub Lite · 3 Free Tools
               </div>
 
-              <h1 className="font-display text-3xl sm:text-5xl uppercase leading-[1.25] mb-6">
+              <h1 className="font-display text-2xl sm:text-4xl uppercase leading-[1.3] mb-6">
                 All the tools a <span className="text-noodle-pink">musician</span> needs.
               </h1>
               <div className="dash-line w-40 mb-6 opacity-80" />
@@ -272,6 +350,8 @@ export function Home() {
                   Open Metronome
                 </button>
               </div>
+
+              <ToolMeter />
             </div>
 
             <HeroLoop />
@@ -298,7 +378,7 @@ export function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
             <div>
-              <h2 className="font-display text-2xl sm:text-3xl uppercase text-noodle-yellow text-glow mb-3">
+              <h2 className="font-display text-lg sm:text-2xl uppercase text-noodle-yellow text-glow mb-3">
                 The Tool Kit
               </h2>
               <p className="text-ink-soft">
@@ -320,6 +400,8 @@ export function Home() {
               ))}
             </div>
           </div>
+
+          <UpgradeBanner />
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {visibleTools.map((tool, i) => {
@@ -357,7 +439,7 @@ export function Home() {
                       <ArrowUpRight className="h-5 w-5 text-ink-soft group-hover:text-noodle-yellow group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                     )}
                   </div>
-                  <h3 className="font-display text-sm uppercase mb-3 leading-relaxed">{tool.title}</h3>
+                  <h3 className="font-display text-xs uppercase mb-3 leading-relaxed">{tool.title}</h3>
                   <p className="text-ink-soft text-sm leading-relaxed">{tool.description}</p>
                   <div className="mt-5 flex gap-2">
                     <span className="pixel-chip bg-cream-deep text-ink-soft">{tool.category}</span>
