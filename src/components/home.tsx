@@ -146,8 +146,6 @@ const colorMap = {
 
 const CATEGORIES = ["Theory", "Practice", "Reference"] as const;
 
-const TICKER = ["Chords", "Scales", "Rhythm", "Ear Training", "Fretboard", "Theory", "Tempo", "Keys"];
-
 /** Little blinking pixel sparkles scattered behind the hero. */
 function PixelSparkles() {
   const dots = [
@@ -319,7 +317,7 @@ export function Home() {
       {/* HERO */}
       <section className="relative overflow-hidden bg-grid">
         <PixelSparkles />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 relative">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="font-display text-[10px] sm:text-xs uppercase text-noodle-yellow text-glow mb-6">
@@ -332,9 +330,9 @@ export function Home() {
               <div className="dash-line w-40 mb-6 opacity-80" />
 
               <p className="text-lg sm:text-xl text-ink-soft max-w-xl mb-8">
-                NoodleHub is a private music toolkit built for our community, helping musicians
-                explore chords, scales, rhythm, and music theory{" "}
-                <span className="font-bold text-ink">in one place</span>.
+                Chords, scales, rhythm and theory, built by musicians for musicians. Three tools
+                are <span className="font-bold text-ink">free to use right now</span>. Hit play on the
+                loop and hear it for yourself.
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -362,22 +360,8 @@ export function Home() {
         </div>
       </section>
 
-      {/* TICKER */}
-      <div className="border-y border-ink overflow-hidden py-4 bg-coal/60">
-        <div className="flex w-max animate-marquee">
-          {[...TICKER, ...TICKER, ...TICKER, ...TICKER].map((t, i) => (
-            <span key={i} className="font-display text-xs uppercase px-6 flex items-center gap-6">
-              <span className={i % 3 === 0 ? "text-noodle-yellow" : i % 3 === 1 ? "text-noodle-pink" : "text-noodle-lavender"}>
-                {t}
-              </span>
-              <span className="w-1.5 h-1.5 bg-ink-soft/50" />
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* TOOL GRID */}
-      <section className="flex-1 py-16 sm:py-20">
+      <section className="flex-1 pt-6 pb-16 sm:pt-8 sm:pb-20 border-t border-ink">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
             <div>
